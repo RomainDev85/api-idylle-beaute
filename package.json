@@ -1,0 +1,26 @@
+{
+  "name": "api-idylle-beaute",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomainDev85/api-idylle-beaute.git"
+  },
+  "author": "romain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RomainDev85/api-idylle-beaute/issues"
+  },
+  "homepage": "https://github.com/RomainDev85/api-idylle-beaute#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
