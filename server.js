@@ -7,6 +7,7 @@ const PORT = 5000;
 
 // Express
 const app = express()
+
 // Cors
 var corsOptions = {
     origin: process.env.CLIENT_URL,
@@ -15,14 +16,17 @@ var corsOptions = {
     "optionsSuccessStatus": 204
 }
 app.use(cors(corsOptions))
+
 // Cookie parser
 app.use(cookieParser());
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({
     extended: false
 }));
-// Mysql
+
+// MySQL
 var connection = mysql.createConnection({
     host     : process.env.DB_HOST,
     user     : process.env.DB_USER,
@@ -33,11 +37,20 @@ connection.connect(() => {
     console.log('Connectez a la base de donnée');
 });
 global.connection = connection;
- 
-app.get('/', function (req, res) {
-  res.json({lastname: "test", firstname: "toto"})
-})
- 
+
+// Callback
+const { showInfoSociety } = require("./controllers/society");
+const { showHours } = require("./controllers/hours");
+const { allCategories, showOneCategories, filterServices } = require("./controllers/services");
+
+// Route API
+app.get('/api/society', showInfoSociety); // Show all info society
+app.get('/api/hours', showHours); // Show hours of society
+app.get("/api/categories", allCategories); // Show all categories
+app.get("/api/categories/:category", showOneCategories); // Show one categories
+app.get("/api/services/:category", filterServices); // Filter services by category
+
+// Server
 app.listen(PORT, () => {
     console.log(`API tourne sur le port ${PORT}`);
 })
