@@ -22,7 +22,7 @@ module.exports = {
     },
     // Filter services by category
     filterServices : (req, res) => {
-        const url = req.params.urlCategorie;
+        const url = req.params.category;
         const query = 'SELECT p.id AS prestation_id, p.nom AS nom_prestation, p.categorie_id, p.price, p.duree, p.image, p.description, p.url_prestation, c.url_categorie, c.nom AS nom_categorie FROM prestation AS p INNER JOIN categorie_prestation AS c ON p.categorie_id = c.id WHERE c.url_categorie = ?'
 
         connection.query(query, [url], (err, result) => {
