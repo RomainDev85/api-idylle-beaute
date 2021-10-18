@@ -32,5 +32,17 @@ module.exports = {
                 // console.log(result);
             }
         })
+    },
+    // Show all categories of service exept the category selected
+    allCategoriesExeptOne : (req, res) => {
+        const query = 'SELECT id, nom, url_categorie FROM categorie_prestation WHERE url_categorie <> ?';
+        const url = req.params.category
+
+        connection.query(query, [url], (err, result) => {
+            if(err) res.send(err);
+            else {
+                res.json(result);
+            }
+        })
     }
 }

@@ -41,13 +41,14 @@ global.connection = connection;
 // Callback
 const { showInfoSociety } = require("./controllers/society");
 const { showHours } = require("./controllers/hours");
-const { allCategories, showOneCategories, filterServices } = require("./controllers/services");
+const { allCategories, showOneCategories, filterServices, allCategoriesExeptOne } = require("./controllers/services");
 
 // Route API
 app.get('/api/society', showInfoSociety); // Show all info society
 app.get('/api/hours', showHours); // Show hours of society
 app.get("/api/categories", allCategories); // Show all categories
 app.get("/api/categories/:category", showOneCategories); // Show one categories
+app.get("/api/categories/exept/:category", allCategoriesExeptOne)
 app.get("/api/services/:category", filterServices); // Filter services by category
 
 // Server
