@@ -27,16 +27,26 @@ app.use(express.urlencoded({
 }));
 
 // MySQL
-var connection = mysql.createConnection({
-    host     : process.env.DB_HOST,
-    user     : process.env.DB_USER,
-    password : process.env.DB_PASS,
-    database : process.env.DB_NAME
+// var connection = mysql.createConnection({
+//     host     : process.env.DB_HOST,
+//     user     : process.env.DB_USER,
+//     password : process.env.DB_PASS,
+//     database : process.env.DB_NAME
+// });
+// connection.connect(() => {
+//     console.log('Connectez a la base de donnée');
+// });
+// global.connection = connection;
+
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    host            : process.env.DB_HOST,
+    user            : process.env.DB_USER,
+    password        : process.env.DB_PASS,
+    database        : process.env.DB_NAME
 });
-connection.connect(() => {
-    console.log('Connectez a la base de donnée');
-});
-global.connection = connection;
+
+global.pool = pool;
 
 // Callback
 const { showInfoSociety } = require("./controllers/society");
