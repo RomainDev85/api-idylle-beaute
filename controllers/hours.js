@@ -2,14 +2,16 @@ module.exports = {
     // Show hours of society
     showHours : (req, res) => {
         const query = 'SELECT * FROM horaire_semaine';
-        connection.query(query, (error, result) => {
-            if(error){
-                console.log(error);
-            }
-            else {
-                console.log(result);
-                res.json(result);
-            }
-        })
+
+        pool.getConnection(function(err, connection) {
+            if (err) throw err; // not connected!          
+            // Use the connection
+            connection.query(query, function (error, results) {
+              res.json(results);
+              connection.release();          
+              // Handle error after the release.
+              if (error) throw error;
+            });
+        });
     },
 }
