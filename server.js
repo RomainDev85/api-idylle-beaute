@@ -46,7 +46,7 @@ const { createUser, login } = require("./controllers/authentification")
 app.get('/api/society', showInfoSociety); // Show all info society
 app.get('/api/hours', showHours); // Show hours of society
 app.get("/api/categories", allCategories); // Show all categories
-app.get("/api/categPories/:category", showOneCategories); // Show one categories
+app.get("/api/categories/:category", showOneCategories); // Show one categories
 app.get("/api/categories/exept/:category", allCategoriesExeptOne)
 app.get("/api/services/:category", filterServices); // Filter services by category
 app.post("/api/create/user", createUser) // Create user
