@@ -39,7 +39,7 @@ global.pool = pool;
 // Callback
 const { showInfoSociety } = require("./controllers/society");
 const { showHours } = require("./controllers/hours");
-const { allCategories, showOneCategories, filterServices, allCategoriesExeptOne } = require("./controllers/services");
+const { allCategories, showOneCategories, filterServices, allCategoriesExeptOne, showLittleCategories, serviceLittleCategory } = require("./controllers/services");
 const { createUser, login } = require("./controllers/authentification")
 
 // Route API
@@ -48,7 +48,9 @@ app.get('/api/hours', showHours); // Show hours of society
 app.get("/api/categories", allCategories); // Show all categories
 app.get("/api/categories/:category", showOneCategories); // Show one categories
 app.get("/api/categories/exept/:category", allCategoriesExeptOne)
+app.get("/api/categories/littlecategory/:category", showLittleCategories) // Show little categories of one category
 app.get("/api/services/:category", filterServices); // Filter services by category
+app.get("/api/services/littlecategory/:idCategory", serviceLittleCategory) // Show services of little category
 app.post("/api/create/user", createUser) // Create user
 app.post("/api/login", login) // Login admin
 

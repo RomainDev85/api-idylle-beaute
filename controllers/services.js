@@ -61,5 +61,33 @@ module.exports = {
               if (error) throw error;
             });
         });
+    },
+    // Show little categorie of categorie
+    showLittleCategories : (req, res) => {
+        const query = 'SELECT sc.id, sc.nom AS sous_categorie, sc.categorie_id, c.nom AS categorie, c.url_categorie  FROM sous_categorie as sc INNER JOIN categorie_prestation AS c ON c.id = sc.categorie_id WHERE c.url_categorie = ?;';
+        const url = req.params.category;
+
+        pool.getConnection(function(err, connection) {
+            if (err) throw err;          
+            connection.query(query, [url], function (error, results) {
+              res.json(results);
+              connection.release();
+              if (error) throw error;
+            });
+        });
+    },
+    // Show services of little category
+    serviceLittleCategory : (req, res) => {
+        const query = 'SELECT psc.id AS id_prestation, psc.id_sous_categorie, sc.categorie_id, psc.nom AS nom_service, psc.duree, psc.price, psc.description FROM prestation_sous_categorie AS psc INNER JOIN sous_categorie AS sc on sc.id = psc.id_sous_categorie WHERE psc.id_sous_categorie = ?;';
+        const id = req.params.idCategory;
+
+        pool.getConnection(function(err, connection) {
+            if (err) throw err;          
+            connection.query(query, [id], function (error, results) {
+              res.json(results);
+              connection.release();
+              if (error) throw error;
+            });
+        });
     }
 }
