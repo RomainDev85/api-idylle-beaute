@@ -36,11 +36,20 @@ var pool  = mysql.createPool({
 });
 global.pool = pool;
 
+// Middleware
+const { checkUser, requireAuth } = require("./middleware/auth");
+
 // Callback
 const { showInfoSociety } = require("./controllers/society");
 const { showHours } = require("./controllers/hours");
 const { allCategories, showOneCategories, filterServices, allCategoriesExeptOne, showLittleCategories, serviceLittleCategory } = require("./controllers/services");
-const { createUser, login } = require("./controllers/authentification")
+const { createUser, login, logout } = require("./controllers/authentification");
+
+// JWT
+app.get('*', checkUser);
+app.get('/jwt', requireAuth, (req, res) => {
+    res.status(200).send(res.locals.user)
+})
 
 // Route API
 app.get('/api/society', showInfoSociety); // Show all info society
@@ -53,6 +62,7 @@ app.get("/api/services/:category", filterServices); // Filter services by catego
 app.get("/api/services/littlecategory/:idCategory", serviceLittleCategory) // Show services of little category
 app.post("/api/create/user", createUser) // Create user
 app.post("/api/login", login) // Login admin
+app.get("/api/logout", logout) // Logout admin
 
 // Server
 app.listen(PORT, () => {
