@@ -10,7 +10,9 @@ const app = express()
 
 // Cors
 var corsOptions = {
-    origin: process.env.CLIENT_URL,
+    // origin: process.env.CLIENT_URL,
+    origin: [process.env.FIRST_CLIENT_URL, process.env.SECOND_CLIENT_URL],
+    credentials: true,
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204

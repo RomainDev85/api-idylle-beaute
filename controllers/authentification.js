@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const maxAge = 24 * 60 * 60 * 1000
+const maxAge = 24 * 60 * 60 * 1000;
 const createToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_SECRET_TOKEN, { expiresIn: maxAge })
-}
+};
 
 module.exports = {
     createUser: (req, res) => {
@@ -60,7 +60,7 @@ module.exports = {
                                 // res.json(results)
                                 const token = createToken({id : results[0].id, email : results[0].email, lastname : results[0].nom, firstname: results[0].prenom});
                                 res.cookie('jwt', token, {httpOnly: true, maxAge : maxAge })
-                                res.json({success: "Token créé"});
+                                res.json(results[0]);
                                 if(err) res.json(err);
                             })
                         }
