@@ -24,8 +24,9 @@ module.exports = {
     },
     requireAuth: (req, res, next) => {
         const token = req.cookies.jwt;
+
         if(token) {
-            jwt.verify(token, process.env.ACCESS_SECRET_TOKEN, async (err, decodedToken) => {
+            jwt.verify(token, process.env.ACCESS_SECRET_TOKEN, (err, decodedToken) => {
                 if(err) {
                     throw err;
                 }
@@ -34,7 +35,7 @@ module.exports = {
                 }
             })
         } else {
-            res.json({error: "Pas de token"})
+            res.json({error: "No user"})
         }
     }
 }

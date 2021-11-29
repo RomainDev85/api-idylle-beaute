@@ -10,23 +10,17 @@ const app = express()
 
 // Cors
 var corsOptions = {
-    // origin: process.env.CLIENT_URL,
     origin: [process.env.FIRST_CLIENT_URL, process.env.SECOND_CLIENT_URL],
     credentials: true,
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
 }
+
 app.use(cors(corsOptions))
-
-// Cookie parser
 app.use(cookieParser());
-
-// Body parser
 app.use(express.json());
-app.use(express.urlencoded({
-    extended: false
-}));
+app.use(express.urlencoded({ extended: false }));
 
 //MySQL
 var pool  = mysql.createPool({

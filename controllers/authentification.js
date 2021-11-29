@@ -57,10 +57,16 @@ module.exports = {
                     bcrypt.compare(password, result[0].mot_de_passe, function(err, success) {
                         if(success) {
                             connection.query(tryConnection, [email, result[0].mot_de_passe], (err, results) => {
-                                // res.json(results)
-                                const token = createToken({id : results[0].id, email : results[0].email, lastname : results[0].nom, firstname: results[0].prenom});
-                                res.cookie('jwt', token, {httpOnly: true, maxAge : maxAge })
-                                res.json(results[0]);
+                                
+                                const token =  createToken({id : results[0].id, email : results[0].email, lastname : results[0].nom, firstname: results[0].prenom});
+                                res.cookie('jwt', token, {httpOnly: true, maxAge })
+                                res.json({
+                                    id: results[0].id,
+                                    email: results[0].email,
+                                    firstname: results[0].prenom,
+                                    lastname: results[0].nom
+                                });
+
                                 if(err) res.json(err);
                             })
                         }
