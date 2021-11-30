@@ -48,38 +48,41 @@ module.exports = {
         const checkEmail = "SELECT email, mot_de_passe FROM utilisateur WHERE email = ?;";
         const tryConnection = "SELECT id, email, nom, prenom FROM utilisateur WHERE email = ? AND mot_de_passe = ?;";
 
-        
-        if(!password || !email) res.json("Remplir tout les champs")
-        pool.getConnection(function(err, connection) {
-            if (err) throw err;        
-            connection.query(checkEmail, [email], function (error, result) {
-                if(result.length > 0) {
-                    bcrypt.compare(password, result[0].mot_de_passe, function(err, success) {
-                        if(success) {
-                            connection.query(tryConnection, [email, result[0].mot_de_passe], (err, results) => {
-                                
-                                const token =  createToken({id : results[0].id, email : results[0].email, lastname : results[0].nom, firstname: results[0].prenom});
-                                res.cookie('jwt', token, {httpOnly: true, maxAge })
-                                res.json({
-                                    id: results[0].id,
-                                    email: results[0].email,
-                                    firstname: results[0].prenom,
-                                    lastname: results[0].nom
-                                });
-
-                                if(err) res.json(err);
-                            })
-                        }
-                        else res.json("Mauvais mot de passe")
-                    });
-                }
-                else {
-                    res.json("Pas de compte associé a cet email")
-                }
-                connection.release();          
-                if (error) throw error;
+        if(!email && !password) res.json({error: {password: "Veuillez indiquer votre mot de passe", email: "Veuillez indiquer votre email"}})       
+        else if(!password) res.json({error: {password: "Veuillez indiquer votre mot de passe"}})      
+        else if(!email) res.json({error: {email: "Veuillez indiquer votre email"}})
+        else {
+            pool.getConnection(function(err, connection) {
+                if (err) throw err;        
+                connection.query(checkEmail, [email], function (error, result) {
+                    if(result.length > 0) {
+                        bcrypt.compare(password, result[0].mot_de_passe, function(err, success) {
+                            if(success) {
+                                connection.query(tryConnection, [email, result[0].mot_de_passe], (err, results) => {
+                                    
+                                    const token =  createToken({id : results[0].id, email : results[0].email, lastname : results[0].nom, firstname: results[0].prenom});
+                                    res.cookie('jwt', token, {httpOnly: true, maxAge })
+                                    res.json({
+                                        id: results[0].id,
+                                        email: results[0].email,
+                                        firstname: results[0].prenom,
+                                        lastname: results[0].nom
+                                    });
+    
+                                    if(err) res.json(err);
+                                })
+                            }
+                            else res.json({error: {password: "Le mot de passe n'est pas correct"}})
+                        });
+                    }
+                    else {
+                        res.json({error: {email: "Pas de compte associé a cet email"}})
+                    }
+                    connection.release();          
+                    if (error) throw error;
+                });
             });
-        });
+        }
     },
     logout: (req, res) => {
         res.cookie('jwt', '', {maxAge: 1});
