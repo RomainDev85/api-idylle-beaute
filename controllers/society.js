@@ -7,11 +7,9 @@ module.exports = {
             if (err) throw err;        
             else {
                 connection.query(query, function (error, results) {
+                    res.json(results[0]);
+                    connection.release();       
                     if (error) throw error;
-                    else {
-                        res.json(results[0]);
-                        connection.release(); 
-                    };       
                 });
             };
         });

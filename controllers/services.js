@@ -7,11 +7,9 @@ module.exports = {
             if (err) throw err;          
             else {
                 connection.query(query, function (error, results) {
+                    res.json(results);
+                    connection.release();          
                     if (error) throw error;
-                    else {
-                        res.json(results);
-                        connection.release();
-                    };          
                 });
             };
         });
@@ -25,11 +23,9 @@ module.exports = {
             if (err) throw err;         
             else {
                 connection.query(query, [category], function (error, results) {
+                    res.json(results[0]);
+                    connection.release();      
                     if (error) throw error;
-                    else {
-                        res.json(results[0]);
-                        connection.release();
-                    };       
                 });
             };
         });
@@ -43,11 +39,9 @@ module.exports = {
             if (err) throw err;          
             else {
                 connection.query(query, [url], function (error, results) {
+                    res.json(results);
+                    connection.release();        
                     if (error) throw error;
-                    else {
-                        res.json(results);
-                        connection.release();
-                    };         
                 });
             };
         });
@@ -61,11 +55,9 @@ module.exports = {
             if (err) throw err;         
             else {
                 connection.query(query, [url], function (error, results) {
-                    if (error) throw error;
-                    else {
-                        res.json(results);
-                        connection.release();
-                    };         
+                    res.json(results);
+                    connection.release();
+                    if (error) throw error;     
                 });
             };
         });
@@ -79,11 +71,9 @@ module.exports = {
             if (err) throw err;          
             else {
                 connection.query(query, [url], function (error, results) {
+                    res.json(results);
+                    connection.release();
                     if (error) throw error;
-                    else {
-                        res.json(results);
-                        connection.release();
-                    };
                 });
             };
         });
@@ -97,11 +87,9 @@ module.exports = {
             if (err) throw err;          
             else {
                 connection.query(query, [id], function (error, results) {
+                    res.json(results);
+                    connection.release();
                     if (error) throw error;
-                    else {
-                        res.json(results);
-                        connection.release();
-                    };
                 });
             };
         });
