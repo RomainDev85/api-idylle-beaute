@@ -2,32 +2,36 @@ module.exports = {
     // Show all categories of service
     allCategories : (req, res) => {
         const query = 'SELECT id, nom, image, url_categorie FROM categorie_prestation';
+        
         pool.getConnection(function(err, connection) {
-            if (err) throw err; // not connected!          
-            // Use the connection
-            connection.query(query, function (error, results) {
-              res.json(results);
-              connection.release();          
-              // Handle error after the release.
-              if (error) throw error;
-            });
+            if (err) throw err;          
+            else {
+                connection.query(query, function (error, results) {
+                    if (error) throw error;
+                    else {
+                        res.json(results);
+                        connection.release();
+                    };          
+                });
+            };
         });
     },
     // Show one categories
     showOneCategories : (req, res) => {
         const query = 'SELECT id, nom, url_categorie, image FROM categorie_prestation WHERE url_categorie = ?';
         const category = req.params.category;
-
         
         pool.getConnection(function(err, connection) {
-            if (err) throw err; // not connected!          
-            // Use the connection
-            connection.query(query, [category], function (error, results) {
-              res.json(results[0]);
-              connection.release();          
-              // Handle error after the release.
-              if (error) throw error;
-            });
+            if (err) throw err;         
+            else {
+                connection.query(query, [category], function (error, results) {
+                    if (error) throw error;
+                    else {
+                        res.json(results[0]);
+                        connection.release();
+                    };       
+                });
+            };
         });
     },
     // Filter services by category
@@ -36,14 +40,16 @@ module.exports = {
         const query = 'SELECT p.id AS prestation_id, p.nom AS nom_prestation, p.categorie_id, p.price, p.duree, p.image, p.description, p.url_prestation, c.url_categorie, c.nom AS nom_categorie FROM prestation AS p INNER JOIN categorie_prestation AS c ON p.categorie_id = c.id WHERE c.url_categorie = ?'
 
         pool.getConnection(function(err, connection) {
-            if (err) throw err; // not connected!          
-            // Use the connection
-            connection.query(query, [url], function (error, results) {
-              res.json(results);
-              connection.release();          
-              // Handle error after the release.
-              if (error) throw error;
-            });
+            if (err) throw err;          
+            else {
+                connection.query(query, [url], function (error, results) {
+                    if (error) throw error;
+                    else {
+                        res.json(results);
+                        connection.release();
+                    };         
+                });
+            };
         });
     },
     // Show all categories of service exept the category selected
@@ -52,14 +58,16 @@ module.exports = {
         const url = req.params.category
         
         pool.getConnection(function(err, connection) {
-            if (err) throw err; // not connected!          
-            // Use the connection
-            connection.query(query, [url], function (error, results) {
-              res.json(results);
-              connection.release();          
-              // Handle error after the release.
-              if (error) throw error;
-            });
+            if (err) throw err;         
+            else {
+                connection.query(query, [url], function (error, results) {
+                    if (error) throw error;
+                    else {
+                        res.json(results);
+                        connection.release();
+                    };         
+                });
+            };
         });
     },
     // Show little categorie of categorie
@@ -69,11 +77,15 @@ module.exports = {
 
         pool.getConnection(function(err, connection) {
             if (err) throw err;          
-            connection.query(query, [url], function (error, results) {
-              res.json(results);
-              connection.release();
-              if (error) throw error;
-            });
+            else {
+                connection.query(query, [url], function (error, results) {
+                    if (error) throw error;
+                    else {
+                        res.json(results);
+                        connection.release();
+                    };
+                });
+            };
         });
     },
     // Show services of little category
@@ -83,11 +95,15 @@ module.exports = {
 
         pool.getConnection(function(err, connection) {
             if (err) throw err;          
-            connection.query(query, [id], function (error, results) {
-              res.json(results);
-              connection.release();
-              if (error) throw error;
-            });
+            else {
+                connection.query(query, [id], function (error, results) {
+                    if (error) throw error;
+                    else {
+                        res.json(results);
+                        connection.release();
+                    };
+                });
+            };
         });
     }
 }

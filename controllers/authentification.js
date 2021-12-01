@@ -67,34 +67,36 @@ module.exports = {
         else {
             pool.getConnection(function(err, connection) {
                 if (err) throw err;        
-                connection.query(checkEmail, [email], function (error, result) {
-                    if(result.length > 0) {
-                        bcrypt.compare(password, result[0].mot_de_passe, function(err, success) {
-                            if(success) {
-                                connection.query(tryConnection, [email, result[0].mot_de_passe], (err, results) => {                              
-                                    const token =  createToken({id : results[0].id, email : results[0].email, lastname : results[0].nom, firstname: results[0].prenom});
-
-                                    if(err) res.json(err);
-                                    else {
-                                        res.cookie('jwt', token, {httpOnly: true, maxAge });
-                                        res.json({
-                                            id: results[0].id,
-                                            email: results[0].email,
-                                            firstname: results[0].prenom,
-                                            lastname: results[0].nom
-                                        });
-                                    }
-                                })
-                            }
-                            else res.json({error: {password: "Le mot de passe n'est pas correct"}});
-                        });
-                    }
-                    else {
-                        res.json({error: {email: "Pas de compte associé a cet email"}});
-                    };
-                    connection.release();          
-                    if (error) throw error;
-                });
+                else {
+                    connection.query(checkEmail, [email], function (error, result) {
+                        if(result.length > 0) {
+                            bcrypt.compare(password, result[0].mot_de_passe, function(err, success) {
+                                if(success) {
+                                    connection.query(tryConnection, [email, result[0].mot_de_passe], (err, results) => {                              
+                                        const token =  createToken({id : results[0].id, email : results[0].email, lastname : results[0].nom, firstname: results[0].prenom});
+    
+                                        if(err) res.json(err);
+                                        else {
+                                            res.cookie('jwt', token, {httpOnly: true, maxAge });
+                                            res.json({
+                                                id: results[0].id,
+                                                email: results[0].email,
+                                                firstname: results[0].prenom,
+                                                lastname: results[0].nom
+                                            });
+                                        }
+                                    })
+                                }
+                                else res.json({error: {password: "Le mot de passe n'est pas correct"}});
+                            });
+                        }
+                        else {
+                            res.json({error: {email: "Pas de compte associé a cet email"}});
+                        };
+                        connection.release();          
+                        if (error) throw error;
+                    });
+                };
             });
         };
     },

@@ -4,14 +4,16 @@ module.exports = {
         const query = 'SELECT * FROM horaire_semaine';
 
         pool.getConnection(function(err, connection) {
-            if (err) throw err; // not connected!          
-            // Use the connection
-            connection.query(query, function (error, results) {
-              res.json(results);
-              connection.release();          
-              // Handle error after the release.
-              if (error) throw error;
-            });
+            if (err) throw err;         
+            else {
+                connection.query(query, function (error, results) {
+                    if (error) throw error;
+                    else {
+                        res.json(results);
+                        connection.release();
+                    };         
+                });
+            };
         });
     },
 }
