@@ -93,5 +93,21 @@ module.exports = {
                 });
             };
         });
+    },
+    // Delete one service
+    deleteService: (req, res) => {
+        const query = "DELETE FROM prestation WHERE id = ?";
+        const id = req.params.idService;
+
+        pool.getConnection(function(err, connection) {
+            if (err) throw err;          
+            else {
+                connection.query(query, [id], function (error, results) {
+                    res.json({success: "La prestation à bien été supprimée"})
+                    connection.release();
+                    if (error) throw error;
+                });
+            };
+        });
     }
 }
