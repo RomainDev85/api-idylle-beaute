@@ -46,7 +46,8 @@ const { allCategories,
         showLittleCategories,
         serviceLittleCategory,
         deleteService,
-        showAllServices } = require("./controllers/services");
+        showAllServices, 
+        editService} = require("./controllers/services");
 const { createUser,
         login,
         logout } = require("./controllers/authentification");
@@ -65,6 +66,7 @@ app.get("/api/categories/:category", showOneCategories); // Show one categories
 app.get("/api/categories/exept/:category", allCategoriesExeptOne)
 app.get("/api/categories/littlecategory/:category", showLittleCategories) // Show little categories of one category
 app.get("/api/services", showAllServices) // Show all services
+app.put("/api/services/:idService", editService) // Edit one service
 app.delete("/api/services/:idService", deleteService) // Delete one service
 app.get("/api/services/:category", filterServices); // Filter services by category
 app.get("/api/services/littlecategory/:idCategory", serviceLittleCategory) // Show services of little category

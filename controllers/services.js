@@ -1,3 +1,25 @@
+const nameToUrl = (str) => {
+    str = str.replace(/^\s+|\s+$/g, '');
+
+    // passe la chaine de caractere en minuscule
+    str = str.toLowerCase();
+
+    // Modifie les lettre avec accent par les memes lettre sans accent ect.
+    var from = "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆÍÌÎÏŇÑÓÖÒÔÕØŘŔŠŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;";
+    var to   = "AAAAAACCCDEEEEEEEEIIIINNOOOOOORRSTUUUUUYYZaaaaaacccdeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------";
+    for (var i=0, l=from.length ; i<l ; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+    // supprime les caractere invalide
+    str = str.replace(/[^a-z0-9 -]/g, '') 
+    // modifie les espaces par des tirets
+    .replace(/\s+/g, '-') 
+    // reduit les tirets
+    .replace(/-+/g, '-'); 
+
+    return str;
+}
+
 module.exports = {
     // Show all categories of service
     allCategories : (req, res) => {
@@ -124,5 +146,43 @@ module.exports = {
                 });
             };
         });
+    },
+    // Edit one service
+    editService: (req, res) => {
+        const id = req.params.idService;
+        let name = req.body.name;
+        let description = req.body.description;
+        let price = req.body.price;
+        let time = req.body.time;
+        const errors = {};
+
+        const query = "UPDATE prestation SET nom = ?, description = ?, duree = ?, price = ?, url_prestation = ? WHERE id = ?;"
+
+        const checkContent = () => {
+            if(!name) errors.name = "La prestation doit avoir un nom.";
+            if(!description) description = null;
+            if(!price) errors.price = "La prestation doit avoir un prix.";
+            if(!time) time = null;
+        }
+
+        try {
+            checkContent();
+            if(!name || !price) res.json({error: errors})
+            else {
+                pool.getConnection(function(err, connection) {
+                    if (err) throw err;          
+                    else {
+                        connection.query(query, [name, description, time, price, nameToUrl(name), id], function (error, result) {
+                            res.json({success: "La prestation a été modifier."});
+                            connection.release();
+                            if (error) throw error;
+                        });
+                    };
+                });
+            };
+        }
+        catch(err){
+            throw err;
+        }
     }
 }
