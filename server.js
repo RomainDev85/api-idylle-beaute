@@ -39,8 +39,17 @@ const { checkUser, requireAuth } = require("./middleware/auth");
 // Callback
 const { showInfoSociety } = require("./controllers/society");
 const { showHours } = require("./controllers/hours");
-const { allCategories, showOneCategories, filterServices, allCategoriesExeptOne, showLittleCategories, serviceLittleCategory, deleteService } = require("./controllers/services");
-const { createUser, login, logout } = require("./controllers/authentification");
+const { allCategories,
+        showOneCategories,
+        filterServices,
+        allCategoriesExeptOne,
+        showLittleCategories,
+        serviceLittleCategory,
+        deleteService,
+        showAllServices } = require("./controllers/services");
+const { createUser,
+        login,
+        logout } = require("./controllers/authentification");
 
 // JWT
 app.get('*', checkUser);
@@ -55,6 +64,7 @@ app.get("/api/categories", allCategories); // Show all categories
 app.get("/api/categories/:category", showOneCategories); // Show one categories
 app.get("/api/categories/exept/:category", allCategoriesExeptOne)
 app.get("/api/categories/littlecategory/:category", showLittleCategories) // Show little categories of one category
+app.get("/api/services", showAllServices) // Show all services
 app.delete("/api/services/:idService", deleteService) // Delete one service
 app.get("/api/services/:category", filterServices); // Filter services by category
 app.get("/api/services/littlecategory/:idCategory", serviceLittleCategory) // Show services of little category

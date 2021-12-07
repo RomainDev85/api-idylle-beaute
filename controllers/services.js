@@ -94,6 +94,21 @@ module.exports = {
             };
         });
     },
+    // Show all services
+    showAllServices: (req, res) => {
+        const query = "SELECT p.id as service_id, p.nom as name, p.categorie_id as category_id, p.price, p.duree as time, p.description, p.url_prestation as url_service, c.url_categorie as url_category FROM prestation as p INNER JOIN categorie_prestation as c ON p.categorie_id = c.id;";
+
+        pool.getConnection(function(err, connection) {
+            if (err) throw err;          
+            else {
+                connection.query(query, function (error, results) {
+                    res.json(results);
+                    connection.release();
+                    if (error) throw error;
+                });
+            };
+        });
+    },
     // Delete one service
     deleteService: (req, res) => {
         const query = "DELETE FROM prestation WHERE id = ?";
