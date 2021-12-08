@@ -150,11 +150,11 @@ module.exports = {
     // Edit one service
     editService: (req, res) => {
         const id = req.params.idService;
-        let name = req.body.name;
+        const name = req.body.name;
+        const price = req.body.price;
         let description = req.body.description;
-        let price = req.body.price;
         let time = req.body.time;
-        const errors = {};
+        let errors = {};
 
         const query = "UPDATE prestation SET nom = ?, description = ?, duree = ?, price = ?, url_prestation = ? WHERE id = ?;"
 
@@ -173,7 +173,7 @@ module.exports = {
                     if (err) throw err;          
                     else {
                         connection.query(query, [name, description, time, price, nameToUrl(name), id], function (error, result) {
-                            res.json({success: "La prestation a été modifier."});
+                            res.json({success: "La prestation a été modifier.", name: name, description: description, price: price, time: time, url_service: nameToUrl(name)});
                             connection.release();
                             if (error) throw error;
                         });
