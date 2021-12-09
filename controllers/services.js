@@ -1,3 +1,4 @@
+// transform string to url parameter
 const nameToUrl = (str) => {
     str = str.replace(/^\s+|\s+$/g, '');
 
@@ -183,6 +184,25 @@ module.exports = {
         }
         catch(err){
             throw err;
+        }
+    },
+    // Create one categories
+    createCategory: (req, res) => {
+        const name = req.body.name;
+        const query = "INSERT INTO categorie_prestation (nom, url_categorie) VALUES (? , ?);";
+
+        if(!name) res.json({ errors: {name: "Un nom est nécessaire pour crée une catégorie."}})
+        else {
+            pool.getConnection(function(err, connection) {
+                if (err) throw err;          
+                else {
+                    connection.query(query, [name, nameToUrl(name)], function (error, result) {
+                        res.json({success: "La catégorie à bien été crée.", nom: name, image: null, url_categorie: nameToUrl(name)});
+                        connection.release();
+                        if (error) throw error;
+                    });
+                };
+            });
         }
     }
 }

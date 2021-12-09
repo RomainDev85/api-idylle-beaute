@@ -1,12 +1,12 @@
 const express = require('express');
 const mysql = require('mysql');
 const cookieParser = require("cookie-parser");
-const cors = require('cors')
+const cors = require('cors');
 require('dotenv').config();
 const PORT = 5000;
 
 // Express
-const app = express()
+const app = express();
 
 // Cors
 var corsOptions = {
@@ -16,9 +16,9 @@ var corsOptions = {
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
-}
+};
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -47,7 +47,8 @@ const { allCategories,
         serviceLittleCategory,
         deleteService,
         showAllServices, 
-        editService} = require("./controllers/services");
+        editService,
+        createCategory} = require("./controllers/services");
 const { createUser,
         login,
         logout } = require("./controllers/authentification");
@@ -55,26 +56,37 @@ const { createUser,
 // JWT
 app.get('*', checkUser);
 app.get('/jwt', requireAuth, (req, res) => {
-    res.status(200).send(res.locals.user)
+    res.status(200).send(res.locals.user);
 })
 
-// Route API
+//////// Route API ///////
+
+// Society
 app.get('/api/society', showInfoSociety); // Show all info society
+
+// Hours
 app.get('/api/hours', showHours); // Show hours of society
+
+// Categories
 app.get("/api/categories", allCategories); // Show all categories
+app.post("/api/categories", createCategory); // Create one category
 app.get("/api/categories/:category", showOneCategories); // Show one categories
-app.get("/api/categories/exept/:category", allCategoriesExeptOne)
-app.get("/api/categories/littlecategory/:category", showLittleCategories) // Show little categories of one category
-app.get("/api/services", showAllServices) // Show all services
-app.put("/api/services/:idService", editService) // Edit one service
-app.delete("/api/services/:idService", deleteService) // Delete one service
+app.get("/api/categories/exept/:category", allCategoriesExeptOne); // Show all categories exept ones
+app.get("/api/categories/littlecategory/:category", showLittleCategories); // Show little categories of one category
+
+// Services
+app.get("/api/services", showAllServices); // Show all services
+app.put("/api/services/:idService", editService); // Edit one service
+app.delete("/api/services/:idService", deleteService); // Delete one service
 app.get("/api/services/:category", filterServices); // Filter services by category
-app.get("/api/services/littlecategory/:idCategory", serviceLittleCategory) // Show services of little category
-app.post("/api/create/user", createUser) // Create user
-app.post("/api/login", login) // Login admin
-app.get("/api/logout", logout) // Logout admin
+app.get("/api/services/littlecategory/:idCategory", serviceLittleCategory); // Show services of little category
+
+// Authentification
+app.post("/api/create/user", createUser); // Create user
+app.post("/api/login", login); // Login admin
+app.get("/api/logout", logout); // Logout admin
 
 // Server
 app.listen(PORT, () => {
     console.log(`API tourne sur le port ${PORT}`);
-})
+});
