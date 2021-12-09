@@ -186,7 +186,7 @@ module.exports = {
             throw err;
         }
     },
-    // Create one categories
+    // Create one category
     createCategory: (req, res) => {
         const name = req.body.name;
         const query = "INSERT INTO categorie_prestation (nom, url_categorie) VALUES (? , ?);";
@@ -204,5 +204,53 @@ module.exports = {
                 };
             });
         }
+    },
+    // Create one service
+    createService: (req, res) => {
+        const title = req.body.title;
+        const category = req.body.category;
+        const price = req.body.price;
+        let description = req.body.description;
+        let time = req.body.time;
+        let errors = {};
+
+        const query = "INSERT INTO prestation (nom, categorie_id, price, duree, description, url_prestation) VALUES (?, ?,  ?, ?, ?, ?);";
+
+        const checkContent = () => {
+            if(!title) errors.title = "La prestation nécessite un titre.";
+            if(!category) errors.category = "La prestation doit appartenir à une catégorie.";
+            if(!price) errors.price = "La prestation nécessite un prix.";
+            if(!description) description = null;
+            if(!time) time = null;
+        };
+
+        try {
+            checkContent();
+            if(!title || !category || !price) res.json({errors: errors})
+            else {
+                pool.getConnection(function(err, connection) {
+                    if (err) throw err;          
+                    else {
+                        connection.query(query, [title, category, price, time, description, nameToUrl(title)], function (error, result) {
+                            // console.log(result.insertId);
+                            res.json({
+                                success: "La catégorie à bien été crée.",
+                                service_id: result.insertId,
+                                name: title,
+                                category_id: category,
+                                price: price,
+                                time: time,
+                                description: description,
+                                url_service: nameToUrl(title)
+                            });
+                            connection.release();
+                            if (error) throw error;
+                        });
+                    };
+                });
+            };
+        } catch(err) {
+            throw err;
+        };
     }
 }

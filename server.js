@@ -48,7 +48,8 @@ const { allCategories,
         deleteService,
         showAllServices, 
         editService,
-        createCategory} = require("./controllers/services");
+        createCategory,
+        createService} = require("./controllers/services");
 const { createUser,
         login,
         logout } = require("./controllers/authentification");
@@ -76,6 +77,7 @@ app.get("/api/categories/littlecategory/:category", showLittleCategories); // Sh
 
 // Services
 app.get("/api/services", showAllServices); // Show all services
+app.post("/api/services", createService); // Create one service
 app.put("/api/services/:idService", editService); // Edit one service
 app.delete("/api/services/:idService", deleteService); // Delete one service
 app.get("/api/services/:category", filterServices); // Filter services by category
