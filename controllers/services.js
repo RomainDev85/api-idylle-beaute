@@ -197,7 +197,7 @@ module.exports = {
                 if (err) throw err;          
                 else {
                     connection.query(query, [name, nameToUrl(name)], function (error, result) {
-                        res.json({success: "La catégorie à bien été crée.", nom: name, image: null, url_categorie: nameToUrl(name)});
+                        res.json({success: "La catégorie à bien été crée.", id: result.insertId, nom: name, image: null, url_categorie: nameToUrl(name)});
                         connection.release();
                         if (error) throw error;
                     });
@@ -237,7 +237,7 @@ module.exports = {
                                 success: "La catégorie à bien été crée.",
                                 service_id: result.insertId,
                                 name: title,
-                                category_id: category,
+                                category_id: Number(category),
                                 price: price,
                                 time: time,
                                 description: description,
